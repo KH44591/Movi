@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLKICK — Drop Culture Footwear</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f0e8;
+    --red: #e63322;
+    --orange: #f07020;
+    --gold: #e8b84b;
+    --gray: #1a1a1a;
+    --light-gray: #2a2a2a;
+    --muted: #888;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* POPUP OVERLAY */
+  #popup-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+    animation: fadeIn 0.5s ease;
+  }
+  @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+  #popup-box {
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a0a00 100%);
+    border: 1px solid var(--orange);
+    max-width: 480px; width: 92%;
+    padding: 0; overflow: hidden;
+    position: relative;
+  }
+  .popup-fire-bar {
+    background: linear-gradient(90deg, var(--red), var(--orange), var(--gold));
+    height: 4px; width: 100%;
+  }
+  .popup-inner { padding: 2.5rem 2rem; }
+  .popup-badge {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    padding: 4px 14px;
+    margin-bottom: 1rem;
+  }
+  .popup-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 6vw, 3rem);
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+  .popup-title span { color: var(--orange); }
+  .popup-subtitle {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  .popup-subtitle strong { color: var(--gold); font-weight: 500; }
+  .popup-timer-row {
+    display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
+    align-items: center;
+  }
+  .timer-block {
+    background: var(--gray);
+    border: 1px solid #333;
+    padding: 8px 14px;
+    text-align: center;
+    min-width: 60px;
+  }
+  .timer-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .timer-label { font-size: 0.6rem; letter-spacing: 2px; color: var(--muted); }
+  .timer-sep { font-size: 1.5rem; color: var(--orange); font-weight: 700; padding-bottom: 8px; }
+  .popup-form { display: flex; flex-direction: column; gap: 10px; }
+  .popup-form input {
+    background: #111;
+    border: 1px solid #333;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.95rem;
+    padding: 12px 16px;
+    outline: none;
+    transition: border 0.2s;
+    width: 100%;
+  }
+  .popup-form input:focus { border-color: var(--orange); }
+  .popup-form input::placeholder { color: #555; }
+  .popup-submit {
+    background: linear-gradient(90deg, var(--red), var(--orange));
+    color: #fff;
+    border: none;
+    padding: 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    width: 100%;
+  }
+  .popup-submit:hover { opacity: 0.88; }
+  .popup-skip {
+    text-align: center;
+    margin-top: 0.8rem;
+    font-size: 0.78rem;
+    color: #444;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .popup-skip:hover { color: #888; }
+  .popup-privacy {
+    font-size: 0.7rem;
+    color: #444;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+  .popup-social-proof {
+    display: flex; align-items: center; gap: 8px;
+    background: #111; border: 1px solid #222;
+    padding: 10px 14px; margin-bottom: 1.2rem;
+  }
+  .pulse-dot {
+    width: 8px; height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .social-text { font-size: 0.82rem; color: #aaa; }
+  .social-text span { color: var(--gold); font-weight: 500; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 4%;
+    background: rgba(10,10,10,0.95);
+    border-bottom: 1px solid #1a1a1a;
+    backdrop-filter: blur(10px);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 4px;
+    color: var(--white);
+  }
+  .nav-logo span { color: var(--orange); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--red);
+    color: #fff;
+    padding: 8px 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--orange); }
+  .mobile-menu-btn { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; cursor: pointer; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 100px 4% 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(230,51,34,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 30% 80%, rgba(240,112,32,0.08) 0%, transparent 50%);
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center;
+    max-width: 1300px; margin: 0 auto; width: 100%;
+    position: relative;
+  }
+  .hero-badge-row { display: flex; gap: 0.5rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+  }
+  .badge-fire { background: var(--red); color: #fff; }
+  .badge-limited { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+  .badge-new { background: var(--orange); color: #fff; }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 0.9;
+    margin-bottom: 1.2rem;
+  }
+  .hero-title .accent { color: var(--orange); }
+  .hero-title .line2 { color: var(--red); }
+  .hero-sub {
+    font-size: 1rem; color: var(--muted); line-height: 1.8;
+    max-width: 380px; margin-bottom: 2rem;
+  }
+  .hero-urgency {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(230,51,34,0.1);
+    border: 1px solid rgba(230,51,34,0.3);
+    border-left: 3px solid var(--red);
+    padding: 10px 16px; margin-bottom: 1.5rem;
+  }
+  .urgency-icon { font-size: 1.1rem; }
+  .urgency-text { font-size: 0.82rem; color: #ffb3ae; line-height: 1.4; }
+  .urgency-text strong { color: var(--red); display: block; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: linear-gradient(90deg, var(--red), var(--orange));
+    color: #fff;
+    padding: 14px 32px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    padding: 14px 32px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    border: 1px solid #444;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--orange); color: var(--orange); }
+  .hero-image-wrap {
+    position: relative;
+    display: flex; justify-content: center; align-items: center;
+  }
+  .hero-shoe-img {
+    width: 100%; max-width: 560px;
+    filter: drop-shadow(0 40px 80px rgba(230,51,34,0.3));
+    animation: floatShoe 4s ease-in-out infinite;
+  }
+  @keyframes floatShoe {
+    0%,100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-18px) rotate(-1deg); }
+  }
+  .hero-stat-row {
+    display: flex; gap: 2rem; margin-top: 2rem;
+  }
+  .hero-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; color: var(--orange); line-height: 1;
+  }
+  .hero-stat-label { font-size: 0.72rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+  /* TICKER */
+  .ticker-wrap {
+    background: var(--red);
+    overflow: hidden; white-space: nowrap;
+    padding: 10px 0;
+  }
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 20s linear infinite;
+  }
+  .ticker-item {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 4px;
+    padding: 0 2rem;
+    color: #fff;
+  }
+  .ticker-dot { color: rgba(255,255,255,0.5); padding: 0 0.5rem; }
+  @keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+
+  /* COLLECTION SECTION */
+  .section { padding: 80px 4%; }
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 5px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    color: var(--white);
+  }
+  .section-title span { color: var(--red); }
+  .section-sub { font-size: 0.9rem; color: var(--muted); margin-top: 0.5rem; }
+
+  /* PRODUCT GRID */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .product-card {
+    background: var(--gray);
+    border: 1px solid #222;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    cursor: pointer;
+  }
+  .product-card:hover { transform: translateY(-6px); border-color: #444; }
+  .product-card.out-of-stock { opacity: 0.7; }
+  .card-badge-row {
+    position: absolute; top: 12px; left: 12px; z-index: 2;
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  .card-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    display: inline-block;
+  }
+  .cb-hot { background: var(--red); color: #fff; }
+  .cb-sale { background: var(--gold); color: #000; }
+  .cb-new { background: var(--orange); color: #fff; }
+  .cb-oos { background: #333; color: #888; }
+  .cb-limited { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+  .card-img-wrap {
+    background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+    padding: 2.5rem 1.5rem 1.5rem;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 220px; position: relative; overflow: hidden;
+  }
+  .card-img-wrap::before {
+    content: '';
+    position: absolute; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 80%; height: 30px;
+    background: radial-gradient(ellipse, rgba(230,51,34,0.3) 0%, transparent 70%);
+  }
+  .card-shoe-emoji { font-size: 7rem; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)); transition: transform 0.4s; }
+  .product-card:hover .card-shoe-emoji { transform: scale(1.08) rotate(-5deg); }
+  .card-oos-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .oos-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    color: #888;
+    border: 2px solid #444;
+    padding: 8px 20px;
+  }
+  .card-body { padding: 1.2rem; }
+  .card-category { font-size: 0.7rem; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 0.3rem; }
+  .card-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 1px; color: var(--white); line-height: 1.1; margin-bottom: 0.8rem; }
+  .card-price-row { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.8rem; }
+  .price-current { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--orange); }
+  .price-original { font-size: 0.9rem; color: #555; text-decoration: line-through; }
+  .price-save {
+    font-size: 0.7rem;
+    background: rgba(232,184,75,0.15);
+    border: 1px solid rgba(232,184,75,0.3);
+    color: var(--gold);
+    padding: 2px 8px;
+    letter-spacing: 1px;
+  }
+  .card-colors { display: flex; gap: 6px; margin-bottom: 0.8rem; align-items: center; }
+  .color-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 1px; margin-right: 2px; }
+  .color-swatch {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .color-swatch:hover { transform: scale(1.3); border-color: #888; }
+  .card-sizes { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .size-chip {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border: 1px solid #333;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+  }
+  .size-chip.available:hover { border-color: var(--orange); color: var(--orange); }
+  .size-chip.sold-out { text-decoration: line-through; opacity: 0.4; cursor: not-allowed; }
+  .card-stock-bar { margin-bottom: 1rem; }
+  .stock-text { font-size: 0.7rem; color: var(--red); letter-spacing: 1px; margin-bottom: 4px; }
+  .stock-track { background: #1a1a1a; height: 3px; border-radius: 2px; overflow: hidden; }
+  .stock-fill { height: 100%; background: linear-gradient(90deg, var(--red), var(--orange)); border-radius: 2px; }
+  .card-btn {
+    width: 100%;
+    padding: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s;
+  }
+  .card-btn-active { background: linear-gradient(90deg, var(--red), var(--orange)); color: #fff; }
+  .card-btn-active:hover { opacity: 0.85; }
+  .card-btn-disabled { background: #222; color: #555; cursor: not-allowed; }
+
+  /* SCARCITY STRIP */
+  .scarcity-strip {
+    background: linear-gradient(90deg, #1a0000, #1a0800, #1a0000);
+    border-top: 1px solid rgba(230,51,34,0.3);
+    border-bottom: 1px solid rgba(230,51,34,0.3);
+    padding: 2rem 4%;
+    text-align: center;
+  }
+  .scarcity-strip h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    color: var(--red);
+    margin-bottom: 0.3rem;
+  }
+  .scarcity-strip p { font-size: 0.9rem; color: var(--muted); }
+  .live-viewers {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 1rem;
+    background: rgba(230,51,34,0.1);
+    border: 1px solid rgba(230,51,34,0.2);
+    padding: 6px 16px;
+  }
+  .live-dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; animation: pulse 1.2s infinite; }
+  .live-text { font-size: 0.82rem; color: #ffb3ae; }
+  .live-count { font-weight: 600; color: var(--red); }
+
+  /* BRAND STORY */
+  .brand-story { background: var(--gray); padding: 80px 4%; }
+  .brand-story-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .story-kicker { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 5px; color: var(--orange); text-transform: uppercase; margin-bottom: 1rem; }
+  .story-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1; color: var(--white); margin-bottom: 1.2rem; }
+  .story-title span { color: var(--red); }
+  .story-body { color: var(--muted); line-height: 1.9; font-size: 0.95rem; margin-bottom: 1.5rem; }
+  .story-features { display: flex; flex-direction: column; gap: 1rem; }
+  .story-feature { display: flex; gap: 1rem; align-items: flex-start; }
+  .feature-icon { font-size: 1.5rem; margin-top: -3px; flex-shrink: 0; }
+  .feature-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 600; letter-spacing: 1px; color: var(--white); }
+  .feature-desc { font-size: 0.82rem; color: var(--muted); }
+  .story-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .story-block {
+    background: var(--black);
+    border: 1px solid #222;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .story-block-num { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--orange); line-height: 1; }
+  .story-block-label { font-size: 0.7rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-top: 0.3rem; }
+
+  /* TESTIMONIALS */
+  .testimonials { padding: 80px 4%; }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem; max-width: 1100px; margin: 3rem auto 0;
+  }
+  .testimonial-card {
+    background: var(--gray);
+    border: 1px solid #222;
+    padding: 1.5rem;
+    position: relative;
+  }
+  .testimonial-card::before {
+    content: '"';
+    position: absolute; top: 10px; right: 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: rgba(240,112,32,0.1);
+    line-height: 1;
+  }
+  .stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 0.7rem; }
+  .review-text { font-size: 0.88rem; color: #bbb; line-height: 1.7; margin-bottom: 1rem; font-style: italic; }
+  .reviewer-row { display: flex; align-items: center; gap: 10px; }
+  .reviewer-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--red), var(--orange));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; color: #fff; flex-shrink: 0;
+  }
+  .reviewer-name { font-size: 0.82rem; font-weight: 500; color: var(--white); }
+  .reviewer-location { font-size: 0.7rem; color: var(--muted); }
+
+  /* EMAIL CAPTURE SECTION */
+  .email-capture {
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a0500 100%);
+    border-top: 1px solid rgba(240,112,32,0.2);
+    border-bottom: 1px solid rgba(240,112,32,0.2);
+    padding: 80px 4%;
+    text-align: center;
+  }
+  .capture-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); color: var(--white); margin-bottom: 0.5rem; }
+  .capture-title span { color: var(--orange); }
+  .capture-sub { font-size: 0.9rem; color: var(--muted); margin-bottom: 2rem; }
+  .capture-perks { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .perk { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: #aaa; }
+  .perk-icon { color: var(--gold); font-size: 1rem; }
+  .capture-form { display: flex; gap: 0; max-width: 520px; margin: 0 auto; flex-wrap: wrap; }
+  .capture-form input {
+    flex: 1; min-width: 200px;
+    background: #111;
+    border: 1px solid #333;
+    border-right: none;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.95rem;
+    padding: 14px 18px;
+    outline: none;
+  }
+  .capture-form input:focus { border-color: var(--orange); }
+  .capture-form input::placeholder { color: #555; }
+  .capture-btn {
+    background: linear-gradient(90deg, var(--red), var(--orange));
+    color: #fff;
+    border: none;
+    padding: 14px 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+  .capture-btn:hover { opacity: 0.85; }
+
+  /* FOOTER */
+  footer {
+    background: #050505;
+    border-top: 1px solid #1a1a1a;
+    padding: 3rem 4% 2rem;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; max-width: 1100px; margin: 0 auto; }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 4px; color: var(--white); margin-bottom: 0.5rem; }
+  .footer-logo span { color: var(--orange); }
+  .footer-tagline { font-size: 0.82rem; color: var(--muted); line-height: 1.6; max-width: 220px; }
+  .footer-col-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase; color: var(--orange); margin-bottom: 1rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-links a { font-size: 0.85rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom { text-align: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #1a1a1a; font-size: 0.75rem; color: #444; max-width: 1100px; margin-left: auto; margin-right: auto; }
+
+  /* SUCCESS POPUP */
+  #success-msg {
+    display: none;
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: #0a1f0a;
+    border: 1px solid #22c55e;
+    color: #22c55e;
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
+    z-index: 9999;
+    animation: slideUp 0.4s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform: translateY(20px) } to { opacity:1; transform: translateY(0) } }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-image-wrap { order: -1; }
+    .hero-shoe-img { max-width: 300px; }
+    .brand-story-inner { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    .mobile-menu-btn { display: block; }
+  }
+  @media (max-width: 540px) {
+    .hero-stat-row { gap: 1.2rem; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .capture-form input { border-right: 1px solid #333; border-bottom: none; }
+    .hero-btns { flex-direction: column; }
+  }
+
+  /* Notification bar */
+  .notif-bar {
+    background: var(--red);
+    text-align: center;
+    padding: 8px 1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+  .notif-bar a { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- SUCCESS TOAST -->
+<div id="success-msg">✓ You're on the list! Watch your inbox for exclusive drops.</div>
+
+<!-- EMAIL POPUP -->
+<div id="popup-overlay">
+  <div id="popup-box">
+    <div class="popup-fire-bar"></div>
+    <div class="popup-inner">
+      <div class="popup-badge">⚡ Exclusive Members Only</div>
+      <h2 class="popup-title">Don't Miss<br>The <span>Next Drop.</span></h2>
+      <p class="popup-subtitle">
+        Join <strong>4,800+ sneakerheads</strong> who get early access, secret discounts, and limited-release alerts before anyone else. These pairs sell out in minutes.
+      </p>
+      <div class="popup-social-proof">
+        <div class="pulse-dot"></div>
+        <span class="social-text"><span id="viewer-count">237</span> people are browsing right now</span>
+      </div>
+      <div class="popup-timer-row">
+        <div class="timer-block">
+          <div class="timer-num" id="t-h">00</div>
+          <div class="timer-label">HRS</div>
+        </div>
+        <div class="timer-sep">:</div>
+        <div class="timer-block">
+          <div class="timer-num" id="t-m">14</div>
+          <div class="timer-label">MIN</div>
+        </div>
+        <div class="timer-sep">:</div>
+        <div class="timer-block">
+          <div class="timer-num" id="t-s">59</div>
+          <div class="timer-label">SEC</div>
+        </div>
+        <div style="margin-left:0.5rem; font-size:0.75rem; color:var(--muted); line-height:1.4; max-width:110px;">Until next drop is revealed</div>
+      </div>
+      <div class="popup-form">
+        <input type="email" id="popup-email" placeholder="Your email address" autocomplete="email">
+        <input type="tel" id="popup-phone" placeholder="Phone number (for SMS drops)" autocomplete="tel">
+        <button class="popup-submit" onclick="handlePopupSubmit()">🔥 GET EARLY ACCESS NOW</button>
+      </div>
+      <p class="popup-skip" onclick="closePopup()">No thanks, I'll miss out on exclusive drops</p>
+      <p class="popup-privacy">🔒 We never share your info. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION BAR -->
+<div class="notif-bar">
+  🔥 MEGA SUMMER SALE — Up to 50% OFF · Limited stock · Free delivery on orders over ৳2,000
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">SOL<span>KICK</span></div>
+  <ul class="nav-links">
+    <li><a href="#collection">Collection</a></li>
+    <li><a href="#story">Our Story</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('popup-overlay').style.display='flex'">Get Drops</button>
+  <button class="mobile-menu-btn" onclick="this.textContent = this.textContent==='☰'?'✕':'☰'">☰</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge-row">
+        <span class="badge badge-fire">🔥 Drop Season</span>
+        <span class="badge badge-limited">Limited Edition</span>
+        <span class="badge badge-new">New Arrivals</span>
+      </div>
+      <h1 class="hero-title">
+        Step Into<br>
+        <span class="accent">Fire.</span><br>
+        <span class="line2">Walk In Power.</span>
+      </h1>
+      <p class="hero-sub">Bangladesh's most coveted footwear drops. Sneakers, sandals & rare collabs that define street culture. Built for those who refuse to blend in.</p>
+      <div class="hero-urgency">
+        <div class="urgency-icon">⚠️</div>
+        <div class="urgency-text">
+          <strong>ONLY 12 PAIRS LEFT IN THIS WEEK'S DROP</strong>
+          Last drop sold out in 4 hours. Don't sleep on it.
+        </div>
+      </div>
+      <div class="hero-btns">
+        <a href="#collection" class="btn-primary">Shop the Drop</a>
+        <a href="#" class="btn-outline" onclick="document.getElementById('popup-overlay').style.display='flex'; return false;">Get VIP Access</a>
+      </div>
+      <div class="hero-stat-row">
+        <div>
+          <div class="hero-stat-num">4.8K+</div>
+          <div class="hero-stat-label">Members</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">98%</div>
+          <div class="hero-stat-label">Satisfaction</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">2 Min</div>
+          <div class="hero-stat-label">Avg Sell-out</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image-wrap">
+      <div style="font-size: 14rem; filter: drop-shadow(0 40px 80px rgba(230,51,34,0.4)); animation: floatShoe 4s ease-in-out infinite; display:inline-block;">👟</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-item">FREE SHIPPING OVER ৳2000</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">SUMMER DROP — 50% OFF SELECT STYLES</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">ONLY 12 PAIRS LEFT IN SIZE 42</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">NEW SANDAL COLLECTION — JUST LANDED</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">VIP MEMBERS GET 24HR EARLY ACCESS</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">FREE SHIPPING OVER ৳2000</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">SUMMER DROP — 50% OFF SELECT STYLES</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">ONLY 12 PAIRS LEFT IN SIZE 42</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">NEW SANDAL COLLECTION — JUST LANDED</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">VIP MEMBERS GET 24HR EARLY ACCESS</span><span class="ticker-dot">◆</span>
+  </div>
+</div>
+
+<!-- COLLECTION -->
+<section class="section" id="collection">
+  <div class="section-header">
+    <p class="section-eyebrow">Current Drop</p>
+    <h2 class="section-title">The <span>Lineup</span></h2>
+    <p class="section-sub">Every pair is limited. When they're gone, they're gone — forever.</p>
+  </div>
+
+  <div class="products-grid" id="products-grid">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+<!-- SCARCITY STRIP -->
+<div class="scarcity-strip">
+  <h3>⚡ WARNING: STOCK IS ALMOST GONE</h3>
+  <p>Our last 3 drops sold out completely within hours. These are flying off the shelf.</p>
+  <div class="live-viewers">
+    <div class="live-dot"></div>
+    <span class="live-text"><span class="live-count" id="live-viewer-num">341</span> people viewing this page right now</span>
+  </div>
+</div>
+
+<!-- BRAND STORY -->
+<section class="brand-story" id="story">
+  <div class="brand-story-inner">
+    <div>
+      <p class="story-kicker">Why SOLKICK</p>
+      <h2 class="story-title">Crafted for<br>The <span>Bold.</span></h2>
+      <p class="story-body">We don't just sell shoes. We curate culture. Every pair in our collection is handpicked for those who know that footwear is a statement — a language spoken before you say a word.</p>
+      <p class="story-body">From the streets of Dhaka to global sneaker culture, SOLKICK brings you authentic drops, unbeatable prices, and the rarest finds you won't see anywhere else in Bangladesh.</p>
+      <div class="story-features">
+        <div class="story-feature">
+          <div class="feature-icon">🔥</div>
+          <div>
+            <div class="feature-title">Scarcity by Design</div>
+            <div class="feature-desc">We stock limited quantities intentionally. Rarity is the point.</div>
+          </div>
+        </div>
+        <div class="story-feature">
+          <div class="feature-icon">💎</div>
+          <div>
+            <div class="feature-title">100% Authentic</div>
+            <div class="feature-desc">Every pair verified. Zero fakes. Your trust is our brand.</div>
+          </div>
+        </div>
+        <div class="story-feature">
+          <div class="feature-icon">⚡</div>
+          <div>
+            <div class="feature-title">Lightning Fast Drops</div>
+            <div class="feature-desc">New pairs land weekly. VIP members get 24-hour head start.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="story-visual">
+      <div class="story-block">
+        <div class="story-block-num">4.8K</div>
+        <div class="story-block-label">Happy Members</div>
+      </div>
+      <div class="story-block">
+        <div class="story-block-num">98%</div>
+        <div class="story-block-label">Sell-Out Rate</div>
+      </div>
+      <div class="story-block">
+        <div class="story-block-num">150+</div>
+        <div class="story-block-label">Styles Dropped</div>
+      </div>
+      <div class="story-block">
+        <div class="story-block-num">48h</div>
+        <div class="story-block-label">Avg Delivery</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="reviews">
+  <div class="section-header">
+    <p class="section-eyebrow">Real Customers</p>
+    <h2 class="section-title">They Copped. <span>They're Obsessed.</span></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Bhai, these arrived in 2 days and the quality is insane. Everyone at uni keeps asking where I got them. Worth every taka."</p>
+      <div class="reviewer-row">
+        <div class="reviewer-avatar">RA</div>
+        <div>
+          <div class="reviewer-name">Rafiul Alam</div>
+          <div class="reviewer-location">Dhaka · Verified Buyer</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"I missed the last drop and I've been kicking myself since. Got on the VIP list and copped the new Jordan collab first. These guys are legit."</p>
+      <div class="reviewer-row">
+        <div class="reviewer-avatar">TH</div>
+        <div>
+          <div class="reviewer-name">Tasnuva H.</div>
+          <div class="reviewer-location">Chittagong · VIP Member</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Sandals are premium quality, exactly as shown. The discount was real, not fake. Ordered 3 pairs for the whole family. Will order again."</p>
+      <div class="reviewer-row">
+        <div class="reviewer-avatar">MK</div>
+        <div>
+          <div class="reviewer-name">Mahmud K.</div>
+          <div class="reviewer-location">Sylhet · Verified Buyer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMAIL CAPTURE -->
+<section class="email-capture" id="contact">
+  <p class="section-eyebrow" style="font-size:0.75rem; letter-spacing:5px; color:var(--orange); text-transform:uppercase; margin-bottom:0.5rem; font-family:'Barlow Condensed',sans-serif;">Join the Inner Circle</p>
+  <h2 class="capture-title">Never Miss a <span>Drop Again.</span></h2>
+  <p class="capture-sub">Get SMS + email alerts before public release. Limited spots available.</p>
+  <div class="capture-perks">
+    <div class="perk"><span class="perk-icon">⚡</span> 24hr early access</div>
+    <div class="perk"><span class="perk-icon">💰</span> Members-only pricing</div>
+    <div class="perk"><span class="perk-icon">🔔</span> SMS drop alerts</div>
+    <div class="perk"><span class="perk-icon">🎁</span> Birthday discount</div>
+  </div>
+  <div class="capture-form">
+    <input type="email" id="footer-email" placeholder="Email address" autocomplete="email">
+    <input type="tel" id="footer-phone" placeholder="Phone / WhatsApp" style="border-right: none; border-left:none;" autocomplete="tel">
+    <button class="capture-btn" onclick="handleFooterSubmit()">JOIN NOW</button>
+  </div>
+  <p style="font-size:0.72rem; color:#444; margin-top:1rem;">🔒 No spam. No sharing. Pure heat only. Unsubscribe anytime.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">SOL<span>KICK</span></div>
+      <p class="footer-tagline">Bangladesh's most exclusive sneaker drop platform. Limited quantities. Unlimited culture.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Shop</div>
+      <ul class="footer-links">
+        <li><a href="#collection">Sneakers</a></li>
+        <li><a href="#collection">Sandals</a></li>
+        <li><a href="#collection">New Arrivals</a></li>
+        <li><a href="#collection">Sale</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Info</div>
+      <ul class="footer-links">
+        <li><a href="#story">Our Story</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Returns Policy</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Connect</div>
+      <ul class="footer-links">
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">TikTok</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 SOLKICK. All Rights Reserved. Built with 🔥 in Bangladesh.
+  </div>
+</footer>
+
+<script>
+// ============================
+// PRODUCT DATA
+// ============================
+const products = [
+  {
+    id: 1, name: "PHANTOM X PRO", category: "Performance Sneaker",
+    emoji: "👟", badges: ["cb-hot"], badgeLabels: ["🔥 Hot"],
+    price: 3200, originalPrice: 5500,
+    colors: ["#111","#e63322","#e8b84b"],
+    sizes: [
+      {s:"38",avail:false},{s:"39",avail:false},{s:"40",avail:true},{s:"41",avail:true},
+      {s:"42",avail:true},{s:"43",avail:false},{s:"44",avail:true}
+    ],
+    stock: 8, totalStock: 50, inStock: true
+  },
+  {
+    id: 2, name: "URBAN GLIDE 2.0", category: "Street Sneaker",
+    emoji: "🥿", badges: ["cb-sale","cb-limited"], badgeLabels: ["SALE 40% OFF","Limited"],
+    price: 2100, originalPrice: 3500,
+    colors: ["#f5f0e8","#888","#1a1a1a"],
+    sizes: [
+      {s:"38",avail:true},{s:"39",avail:true},{s:"40",avail:false},{s:"41",avail:true},
+      {s:"42",avail:false},{s:"43",avail:true},{s:"44",avail:false}
+    ],
+    stock: 15, totalStock: 60, inStock: true
+  },
+  {
+    id: 3, name: "WAVE RUNNER ELITE", category: "Running Sneaker",
+    emoji: "👟", badges: ["cb-new"], badgeLabels: ["New"],
+    price: 4800, originalPrice: 4800,
+    colors: ["#3b82f6","#f5f0e8","#22c55e"],
+    sizes: [
+      {s:"38",avail:true},{s:"39",avail:true},{s:"40",avail:true},{s:"41",avail:true},
+      {s:"42",avail:true},{s:"43",avail:true},{s:"44",avail:true}
+    ],
+    stock: 30, totalStock: 80, inStock: true
+  },
+  {
+    id: 4, name: "DESERT DRIFT SANDAL", category: "Premium Sandal",
+    emoji: "🩴", badges: ["cb-sale"], badgeLabels: ["30% OFF"],
+    price: 1400, originalPrice: 2000,
+    colors: ["#c8a47a","#8B4513","#1a1a1a"],
+    sizes: [
+      {s:"38",avail:true},{s:"39",avail:false},{s:"40",avail:true},{s:"41",avail:true},
+      {s:"42",avail:true},{s:"43",avail:false},{s:"44",avail:true}
+    ],
+    stock: 22, totalStock: 70, inStock: true
+  },
+  {
+    id: 5, name: "SHADOW FORCE LOW", category: "Lifestyle Sneaker",
+    emoji: "👟", badges: ["cb-limited","cb-hot"], badgeLabels: ["Limited","🔥 Fire"],
+    price: 5200, originalPrice: 7000,
+    colors: ["#0a0a0a","#e63322","#888"],
+    sizes: [
+      {s:"38",avail:false},{s:"39",avail:false},{s:"40",avail:false},{s:"41",avail:false},
+      {s:"42",avail:false},{s:"43",avail:false},{s:"44",avail:false}
+    ],
+    stock: 0, totalStock: 30, inStock: false
+  },
+  {
+    id: 6, name: "CLOUD STEP SLIDE", category: "Comfort Sandal",
+    emoji: "🩴", badges: ["cb-new","cb-sale"], badgeLabels: ["New","20% OFF"],
+    price: 980, originalPrice: 1200,
+    colors: ["#f5f0e8","#f07020","#3b82f6"],
+    sizes: [
+      {s:"38",avail:true},{s:"39",avail:true},{s:"40",avail:true},{s:"41",avail:false},
+      {s:"42",avail:true},{s:"43",avail:true},{s:"44",avail:false}
+    ],
+    stock: 5, totalStock: 40, inStock: true
+  }
+];
+
+function renderProducts() {
+  const grid = document.getElementById('products-grid');
+  grid.innerHTML = products.map(p => {
+    const discount = p.originalPrice > p.price
+      ? Math.round((1 - p.price/p.originalPrice)*100) : 0;
+    const stockPct = Math.round((p.stock/p.totalStock)*100);
+    const isLow = p.stock > 0 && p.stock <= 10;
+    return `
+    <div class="product-card ${!p.inStock?'out-of-stock':''}">
+      <div class="card-badge-row">
+        ${p.badges.map((b,i) => `<span class="card-badge ${b}">${p.badgeLabels[i]}</span>`).join('')}
+        ${!p.inStock ? '<span class="card-badge cb-oos">Out of Stock</span>' : ''}
+      </div>
+      <div class="card-img-wrap">
+        <div style="font-size:7rem; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5)); transition:transform 0.4s; display:inline-block;" class="shoe-emoji">${p.emoji}</div>
+        ${!p.inStock ? `<div class="card-oos-overlay"><div class="oos-text">SOLD OUT</div></div>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-category">${p.category}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-price-row">
+          <span class="price-current">৳${p.price.toLocaleString()}</span>
+          ${p.originalPrice > p.price ? `<span class="price-original">৳${p.originalPrice.toLocaleString()}</span><span class="price-save">SAVE ${discount}%</span>` : ''}
+        </div>
+        <div class="card-colors">
+          <span class="color-label">Colors:</span>
+          ${p.colors.map(c => `<div class="color-swatch" style="background:${c}" title="${c}"></div>`).join('')}
+        </div>
+        <div class="card-sizes">
+          ${p.sizes.map(s => `<div class="size-chip ${s.avail?'available':'sold-out'}">${s.s}</div>`).join('')}
+        </div>
+        ${p.inStock ? `
+        <div class="card-stock-bar">
+          <div class="stock-text">${isLow ? `⚠️ Only ${p.stock} left — selling fast!` : `${p.stock} pairs remaining`}</div>
+          <div class="stock-track"><div class="stock-fill" style="width:${stockPct}%"></div></div>
+        </div>` : ''}
+        <button class="card-btn ${p.inStock?'card-btn-active':'card-btn-disabled'}" ${!p.inStock?'disabled':''} onclick="handleBuy(${p.id})">
+          ${p.inStock ? '🛒 Add to Bag' : '📧 Notify Me'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function handleBuy(id) {
+  const p = products.find(x => x.id === id);
+  if (!p.inStock) {
+    document.getElementById('popup-overlay').style.display = 'flex';
+    return;
+  }
+  showToast(`🔥 ${p.name} added! Complete your order via WhatsApp.`);
+}
+
+// ============================
+// EMAIL COLLECTION (localStorage for demo — replace with Google Sheets)
+// ============================
+function collectLead(email, phone, source) {
+  if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return false; }
+  const leads = JSON.parse(localStorage.getItem('solkick_leads') || '[]');
+  leads.push({ email, phone, source, date: new Date().toISOString() });
+  localStorage.setItem('solkick_leads', JSON.stringify(leads));
+  return true;
+}
+
+function handlePopupSubmit() {
+  const email = document.getElementById('popup-email').value.trim();
+  const phone = document.getElementById('popup-phone').value.trim();
+  if (collectLead(email, phone, 'popup')) {
+    closePopup();
+    showToast('✓ Welcome to the inner circle! Drop alerts incoming 🔥');
+  }
+}
+
+function handleFooterSubmit() {
+  const email = document.getElementById('footer-email').value.trim();
+  const phone = document.getElementById('footer-phone').value.trim();
+  if (collectLead(email, phone, 'footer')) {
+    document.getElementById('footer-email').value = '';
+    document.getElementById('footer-phone').value = '';
+    showToast('✓ You\'re on the VIP list! Next drop alert coming soon.');
+  }
+}
+
+function closePopup() {
+  document.getElementById('popup-overlay').style.display = 'none';
+}
+
+function showToast(msg) {
+  const el = document.getElementById('success-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+// ============================
+// COUNTDOWN TIMER
+// ============================
+function startTimer() {
+  let total = 14 * 60 + 59;
+  setInterval(() => {
+    total--;
+    if (total < 0) total = 24 * 60 * 60;
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    document.getElementById('t-h').textContent = String(h).padStart(2,'0');
+    document.getElementById('t-m').textContent = String(m).padStart(2,'0');
+    document.getElementById('t-s').textContent = String(s).padStart(2,'0');
+  }, 1000);
+}
+
+// ============================
+// FAKE LIVE VIEWER COUNT
+// ============================
+function animateViewers() {
+  const base = 280;
+  function fluctuate(elId) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    el.textContent = base + Math.floor(Math.random() * 120);
+    setTimeout(() => fluctuate(elId), 3000 + Math.random() * 5000);
+  }
+  fluctuate('viewer-count');
+  fluctuate('live-viewer-num');
+}
+
+// ============================
+// SHOE HOVER ANIMATION
+// ============================
+document.addEventListener('mouseover', e => {
+  const emoji = e.target.closest('.card-img-wrap')?.querySelector('.shoe-emoji');
+  if (emoji) emoji.style.transform = 'scale(1.08) rotate(-5deg)';
+});
+document.addEventListener('mouseout', e => {
+  const emoji = e.target.closest('.card-img-wrap')?.querySelector('.shoe-emoji');
+  if (emoji) emoji.style.transform = '';
+});
+
+// INIT
+renderProducts();
+startTimer();
+animateViewers();
+</script>
+</body>
+</html>
