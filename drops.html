@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drops — MOVI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="logo-wrap">
+        <img src="logo.png" alt="MOVI" class="nav-logo" />
+      </a>
+      <div class="nav-links">
+        <a href="drops.html">Drops</a>
+        <a href="about.html">About</a>
+        <a href="preorder.html" class="nav-cta">Preorder</a>
+      </div>
+      <button class="burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="drops.html">Drops</a>
+      <a href="about.html">About</a>
+      <a href="preorder.html">Preorder</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>ALL<br>DROPS</h1>
+    <p>Every MOVI release — past, present, and upcoming</p>
+  </div>
+
+  <div class="drops-grid">
+
+    <!-- DROP 001 — OPEN -->
+    <div class="drop-card">
+      <div class="drop-card-img" style="background:#f0efeb; padding:0; overflow:hidden;">
+        <img
+          src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/c5af9972e94847bdb80fae5e009c2aff_9366/Samba_OG_Shoes_White_B75806_01_standard.jpg"
+          alt="MOVI Shadow Drop 001"
+          style="width:100%;height:100%;object-fit:cover;"
+        />
+      </div>
+      <p class="drop-status status-open">● Preorder Open</p>
+      <h2 class="drop-card-name">MOVI Shadow</h2>
+      <p class="drop-card-meta">Drop 001 · 200 pairs · Chalk / Onyx / Army</p>
+      <p class="drop-card-price">৳3,499</p>
+      <a href="preorder.html" class="btn-primary" style="display:block;text-align:center;">Preorder Now →</a>
+    </div>
+
+    <!-- DROP 000 — SOLD -->
+    <div class="drop-card" style="opacity:0.65;">
+      <div class="drop-card-img" style="background:#1a1a1a; padding:0; overflow:hidden; position:relative;">
+        <img
+          src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/4e4ab6ac1c374e1aabc6af28014dc42b_9366/Samba_OG_Shoes_Core_Black_B75807_01_standard.jpg"
+          alt="MOVI Proto Drop 000"
+          style="width:100%;height:100%;object-fit:cover;filter:grayscale(60%);"
+        />
+        <div style="position:absolute;top:0.8rem;left:0.8rem;background:#888;color:#fff;font-family:var(--font-mono);font-size:0.6rem;padding:0.25rem 0.6rem;letter-spacing:0.15em;text-transform:uppercase;">Sold Out</div>
+      </div>
+      <p class="drop-status status-sold">— Sold Out</p>
+      <h2 class="drop-card-name">MOVI Proto</h2>
+      <p class="drop-card-meta">Drop 000 · 50 pairs · Black only</p>
+      <p class="drop-card-price">৳2,999 <span style="font-size:0.65rem;color:#888;font-weight:400;">— Closed</span></p>
+      <a href="#" class="btn-outline" style="display:block;text-align:center;opacity:0.5;cursor:default;">Sold Out</a>
+    </div>
+
+    <!-- DROP 002 — COMING SOON -->
+    <div class="drop-card">
+      <div class="drop-card-img" style="background:#1a1a1a; display:flex; align-items:center; justify-content:center; position:relative;">
+        <span style="font-family:var(--font-display);font-size:5rem;color:rgba(255,255,255,0.06);letter-spacing:0.3em;">???</span>
+        <div style="position:absolute;top:0.8rem;left:0.8rem;background:#e8001d;color:#fff;font-family:var(--font-mono);font-size:0.6rem;padding:0.25rem 0.6rem;letter-spacing:0.15em;text-transform:uppercase;">Coming Soon</div>
+      </div>
+      <p class="drop-status status-soon">◌ Coming Soon</p>
+      <h2 class="drop-card-name">MOVI ???</h2>
+      <p class="drop-card-meta">Drop 002 · Details TBA</p>
+      <p class="drop-card-price" style="color:#aaa;">TBA</p>
+      <button class="btn-outline" onclick="notify()" style="width:100%;cursor:pointer;">Notify Me →</button>
+    </div>
+
+  </div>
+
+  <section class="manifesto">
+    <div class="manifesto-inner">
+      <img src="logo.png" alt="MOVI" class="manifesto-logo" />
+      <p class="manifesto-text">Every drop. One chance.<br>Miss it and it's gone.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="logo.png" alt="MOVI" class="footer-logo-img" />
+        <p class="footer-tag">Move Different.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="preorder.html">Preorder</a>
+        <a href="about.html">About</a>
+      </div>
+      <p class="footer-copy">© 2025 MOVI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    function notify() {
+      const email = prompt('Enter your email to get notified for Drop 002:');
+      if (email && email.includes('@')) {
+        alert('You\'re on the list. We\'ll notify you when Drop 002 goes live.');
+      }
+    }
+  </script>
+</body>
+</html>
