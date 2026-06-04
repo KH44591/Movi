@@ -30,7 +30,7 @@ const MOVI_DROPS = [
         // image: তোমার GitHub Images/ folder এর path
         views: [
           { label: "Side",   image: "Images/hero-shoe.png" },
-          { label: "Front",  image: "Images/hero-shoe.png" }, // আলাদা image দাও
+          { label: "Front",  image: "Images/hero-shoe 1.png" }, // আলাদা image দাও
           { label: "Back",   image: "Images/hero-shoe.png" },
           { label: "Top",    image: "Images/hero-shoe.png" },
           { label: "Detail", image: "Images/hero-shoe.png" },
