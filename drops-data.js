@@ -29,8 +29,8 @@ const MOVI_DROPS = [
         // label: customer যা দেখবে
         // image: তোমার GitHub Images/ folder এর path
         views: [
-          { label: "Side",   image: "Images/hero-shoe.png" },
-          { label: "Front",  image: "Images/hero-shoe 1.png" }, // আলাদা image দাও
+          { label: "Side",   image: "https://github.com/KH44591/Movi/blob/main/Images/hero-shoe%201.png" },
+          { label: "Front",  image: "Images/hero-shoe.png" }, // আলাদা image দাও
           { label: "Back",   image: "Images/hero-shoe.png" },
           { label: "Top",    image: "Images/hero-shoe.png" },
           { label: "Detail", image: "Images/hero-shoe.png" },
@@ -44,6 +44,7 @@ const MOVI_DROPS = [
           { label: "Side",   image: "Images/hero-shoe.png" },
           { label: "Front",  image: "Images/hero-shoe.png" },
           { label: "Back",   image: "Images/hero-shoe.png" },
+          
         ],
       },
       {
